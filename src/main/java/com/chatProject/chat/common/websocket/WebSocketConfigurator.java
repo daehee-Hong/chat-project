@@ -1,4 +1,4 @@
-package com.chatProject.chat.websocket;
+package com.chatProject.chat.common.websocket;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.HandshakeResponse;

@@ -1,15 +1,15 @@
-package com.chatProject.chat.dto;
+package com.chatProject.chat.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class LoginDto {
+public class UserDto {
 
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class loginReq {
+    public static class userLoginReq {
         private String userId;
         private String userPw;
     }

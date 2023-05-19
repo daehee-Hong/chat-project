@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.chatProject.chat.user.mapper.UserMapper">
+    <select id="userCheck"
+            resultType="String"
+            parameterType="com.chatProject.chat.user.dto.UserDto$userLoginReq">
+        SELECT
+            SALT
+        FROM
+            R_USER_T
+        WHERE 1=1
+          AND USER_ID = #{userId}
+    </select>
+</mapper>

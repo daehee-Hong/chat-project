@@ -1,7 +1,8 @@
-package com.chatProject.chat.controller;
+package com.chatProject.chat.user.controller;
 
-import com.chatProject.chat.dto.LoginDto;
-import com.chatProject.chat.service.LoginService;
+import com.chatProject.chat.user.dto.UserDto;
+
+import com.chatProject.chat.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,23 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class LoginRestController {
+public class UserRestController {
 
-    private final LoginService loginService;
+    private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/login")
     private ResponseEntity login(
-            @RequestBody LoginDto.loginReq req
+             @RequestBody UserDto.userLoginReq req
             ) {
         Integer result = 0;
         try{
-            result = loginService.login(req);
+            result = userService.login(req);
         }catch (Exception e){
             e.printStackTrace();
-            log.error("Login Error");
+            log.error("Login Error : " + e.getMessage());
             result = -1;
-        }finally {
-            return new ResponseEntity(result, HttpStatus.OK);
         }
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

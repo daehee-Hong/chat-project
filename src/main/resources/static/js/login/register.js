@@ -3,9 +3,9 @@ window.onload = function() {
 };
 
 function setLoginPageEvent() {
-    // 로그인 버튼
-    document.getElementById('login')
-        .addEventListener('click', login)
+    // 회원가입 버튼
+    document.getElementById('register')
+        .addEventListener('click', register)
     // 회원가입 버튼
     document.getElementById('joinMember')
         .addEventListener('click', () => {
@@ -13,7 +13,7 @@ function setLoginPageEvent() {
         })
 }
 
-function login() {
+function register() {
     let sendObject = {};
     const userId = document.getElementById('inputId').value;
     const userPw = document.getElementById('inputPassword').value;
