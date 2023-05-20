@@ -7,4 +7,8 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface UserMapper {
     String userCheck(UserDto.userLoginReq req);
+
+    Integer userIdCheck(UserDto.userIdCheckReq req);
+
+    Integer userRegister(UserDto.userRegisterReq req);
 }

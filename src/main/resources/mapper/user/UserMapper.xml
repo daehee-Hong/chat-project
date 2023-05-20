@@ -5,6 +5,7 @@
     <select id="userCheck"
             resultType="String"
             parameterType="com.chatProject.chat.user.dto.UserDto$userLoginReq">
+        /* 사용자 SALT 조회 */
         SELECT
             SALT
         FROM
@@ -12,4 +13,34 @@
         WHERE 1=1
           AND USER_ID = #{userId}
     </select>
+    <select id="userIdCheck"
+            resultType="Integer"
+            parameterType="String">
+        /* 사용자 ID 조회 */
+        SELECT
+            COUNT(*)
+        FROM
+            R_USER_T
+        WHERE 1=1
+          AND USER_ID = #{userId}
+    </select>
+    <insert id="userRegister"
+            parameterType="com.chatProject.chat.user.dto.UserDto$userRegisterReq">
+        /* 사용자 등록 */
+        INSERT
+        INTO
+            R_USER_T
+        (
+            USER_ID
+            ,USER_PW
+            ,NICK_NAME
+            ,SALT
+        )VALUES
+            (
+            #{userId}
+            ,#{hex}
+            ,#{nickName}
+            ,#{salt}
+            )
+    </insert>
 </mapper>

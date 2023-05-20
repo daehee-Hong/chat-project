@@ -9,7 +9,7 @@ function setLoginPageEvent() {
     // 회원가입 버튼
     document.getElementById('joinMember')
         .addEventListener('click', () => {
-            location.href="/register";
+            location.href="/user/register";
         })
 }
 
