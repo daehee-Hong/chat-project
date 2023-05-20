@@ -54,24 +54,34 @@ function register() {
     console.log('sendObject : ', sendObject);
 
     // 회원가입시
-    fetch("/user-register", reqJsonOption('POST', sendObject))
+    fetch("/api/v1/user-register", reqJsonOption('POST', sendObject))
         .then(res => res.json())
         .then(data => {
-            const title = data.title;
-            const comment = data.comment;
-
-            if (title == '등록완료'){
-                Swal.fire({
-                    title: comment,
-                    confirmButtonText: '확인',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.href="/user/login";
-                    }
-                })
-            }else {
-                sweetAlert('warning', title, comment, 3000);
+            if (data.status == 400){
+                sweetAlert('error', '유효성검사', '값을 전부 입력해주세요', 3000);
+                return;
+            }else if (data.status == 500){
+                sweetAlert('error', '회원가입 실패', '회원가입 중 에러가 발생했습니다.', 3000);
+                return;
             }
+                const title = data.title;
+                const comment = data.comment;
+
+                if (title == '등록완료'){
+                    Swal.fire({
+                        title: comment,
+                        confirmButtonText: '확인',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.href="/user/login";
+                        }
+                    })
+                }else {
+                    sweetAlert('warning', title, comment, 3000);
+                }
+        })
+        .catch(res => {
+            sweetAlert('error', '연결오류', '서버 연결중 에러가 발생했습니다. \n 인터넷을 확인해주세요.', 3000)
         })
 }
 function userIdCheck() {
@@ -88,9 +98,16 @@ function userIdCheck() {
     sendObject.userId = $userId.value;
 
     // ID 중복확인
-    fetch("/userIdCheck", reqJsonOption('POST', sendObject))
+    fetch("/api/v1/userIdCheck", reqJsonOption('POST', sendObject))
         .then(res => res.json())
         .then(data => {
+            if (data.status == 400){
+                sweetAlert('error', '유효성검사', 'ID를 입력해주세요', 3000);
+                return;
+            }else if (data.status == 500){
+                sweetAlert('error', '확인실패', '확인중 에러가 발생했습니다.', 3000);
+                return;
+            }
             if (data == 1){
                 sweetAlert('warning', 'ID 중복', '이미 존재하는 ID입니다', 3000);
             }else if (data == 0) {
@@ -105,21 +122,4 @@ function userIdCheck() {
         .catch(res => {
             sweetAlert('error', '연결오류', '서버 연결중 에러가 발생했습니다. \n 인터넷을 확인해주세요.', 3000)
         })
-}
-function reqJsonOption(method, sendObject){
-    return {
-        method : method,
-        headers : {
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify(sendObject)
-    }
-}
-function sweetAlert(icon, title, text, timer) {
-    Swal.fire({
-        icon: icon,
-        title: title,
-        text: text,
-        timer: timer
-    })
 }

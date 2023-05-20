@@ -1,5 +1,7 @@
 package com.chatProject.chat.user.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,23 +13,47 @@ public class UserDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class userLoginReq {
+    public static class userInfo {
+        private String userIdx;
         private String userId;
+        private String nickName;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class userLoginReq {
+        @NotBlank
+        private String userId;
+        @NotBlank
+        private String userPw;
+    }
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class userLoginCheck {
+        private Long userIdx;
+        private String salt;
         private String userPw;
     }
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class userIdCheckReq {
+        @NotBlank
         private String userId;
     }
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class userRegisterReq {
+        @NotBlank
         private String userId;
+        @NotBlank
         private String userPw;
+        @NotBlank
         private String userPwTest;
+        @NotBlank
         private String nickName;
         private String salt;
         private String hex;

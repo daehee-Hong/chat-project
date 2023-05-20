@@ -31,18 +31,26 @@ function login() {
 
     console.log('sendObject : ', sendObject);
 
-    const reqOption = {
-        method : 'POST',
-        headers : {
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify(sendObject)
-    }
-
     // 로그인시
-    fetch("/login", reqOption)
+    fetch("/api/v1/login", reqJsonOption('POST', sendObject))
         .then(res => res.json())
         .then(data => {
+            if (data.status == 400){
+                sweetAlert('error', '유효성검사', '빈칸을 입력해주세요.', 3000);
+                return;
+            }
+            if (data == 0){
+                sweetAlert('waring', '유효성검사', 'ID 또는 비밀번호가 다릅니다.', 3000);
+                return;
+            }else if (data == -1){
+                sweetAlert('waring', '에러발생', '로그인 중 에러가 발생했습니다.', 3000);
+                return;
+            }else if (data == 1){
+                location.href = "/chat/main";
+            }
             console.log('resData : ' + data);
+        })
+        .catch(res => {
+            sweetAlert('error', '연결오류', '서버 연결중 에러가 발생했습니다. \n 인터넷을 확인해주세요.', 3000)
         })
 }

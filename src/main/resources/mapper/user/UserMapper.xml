@@ -3,15 +3,18 @@
 
 <mapper namespace="com.chatProject.chat.user.mapper.UserMapper">
     <select id="userCheck"
-            resultType="String"
+            resultType="com.chatProject.chat.user.dto.UserDto$userLoginCheck"
             parameterType="com.chatProject.chat.user.dto.UserDto$userLoginReq">
-        /* 사용자 SALT 조회 */
+        /* 사용자 로그인 필요정보 조회 */
         SELECT
             SALT
+            ,USER_PW
+            ,USER_IDX
         FROM
             R_USER_T
         WHERE 1=1
           AND USER_ID = #{userId}
+        LIMIT 1
     </select>
     <select id="userIdCheck"
             resultType="Integer"
@@ -43,4 +46,17 @@
             ,#{salt}
             )
     </insert>
+    <select id="findUserByUserIdx"
+            resultType="com.chatProject.chat.user.dto.UserDto$userInfo"
+            parameterType="Long">
+        /* 사용자 정보 조회 */
+        SELECT
+            USER_IDX
+            ,USER_ID
+            ,NICK_NAME
+        FROM
+            R_USER_T
+        WHERE 1=1
+            AND USER_IDX = #{id}
+    </select>
 </mapper>

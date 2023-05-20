@@ -3,6 +3,8 @@ package com.chatProject.chat.user.service;
 import com.chatProject.chat.common.Utils.Utils;
 import com.chatProject.chat.user.dto.UserDto;
 import com.chatProject.chat.user.mapper.UserMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +20,26 @@ public class UserService{
     @Autowired
     private UserMapper userMapper;
 
-    public Integer login(UserDto.userLoginReq req) {
-        Integer result = 0;
-        String userId = req.getUserId();
-        String userPw = req.getUserPw();
-
-        String userSalt = userMapper.userCheck(req);
-        System.out.println("userSalt = " + userSalt);
-        if ("".equals(userSalt) || userSalt == null){
-            return -2;
+    public Integer login(UserDto.userLoginReq req, HttpServletRequest request) throws NoSuchAlgorithmException {
+        // SALT 조회 (없으면 ERROR)
+        UserDto.userLoginCheck loginCheck = userMapper.userCheck(req);
+        if ("".equals(loginCheck.getSalt()) || loginCheck.getSalt() == null){
+            return -1;
         }
-        return 1;
+        // 로그인 중 비밀번호 매칭확인
+        Map<String, String> alg = Utils.makeHexByPwAndSalt(req.getUserPw(), loginCheck.getSalt());
+        if (!alg.get("HEX").equals(loginCheck.getUserPw())){
+            // 비밀번호 상이
+            return 0;
+        }else {
+            // 비밀번호 매칭
+            UserDto.userInfo userInfo = userMapper.findUserByUserIdx(loginCheck.getUserIdx());
+
+            HttpSession session = request.getSession();
+            session.setAttribute("userInfo", userInfo);
+
+            return 1;
+        }
     }
 
     public Integer userIdCheck(UserDto.userIdCheckReq req) {
@@ -50,7 +61,7 @@ public class UserService{
         }
 
         // SALT 생성 및 PW SHA256 암호화
-        Map<String, String> alg = Utils.makeSecurityByPw(req.getUserPw());
+        Map<String, String> alg = Utils.makeSaltAndHexByPw(req.getUserPw());
         req.setSaltAndHex(alg.get("SALT"), alg.get("HEX"));
 
         Integer userRegister = userMapper.userRegister(req);

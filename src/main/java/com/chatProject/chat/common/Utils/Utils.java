@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Utils {
-
-    public static Map<String,String> makeSecurityByPw(String userPw) throws NoSuchAlgorithmException {
+    // 비밀번호 평문으로 SALT, HEX 값 얻기
+    public static Map<String,String> makeSaltAndHexByPw(String userPw) throws NoSuchAlgorithmException {
         Map<String,String> result = new HashMap<>();
         String hex;
 
@@ -28,8 +28,23 @@ public class Utils {
         md.update(rawAndSalt.getBytes());
         hex = String.format("%064x", new BigInteger(1, md.digest()));
 
-        result.putIfAbsent("SALT", salt);
-        result.putIfAbsent("HEX", hex);
+        result.put("SALT", salt);
+        result.put("HEX", hex);
+        return result;
+    }
+    // SALT, 비밀번호 평문으로 암호화 문자열 찾기
+    public static Map<String, String> makeHexByPwAndSalt(String userPw, String salt) throws NoSuchAlgorithmException {
+        Map<String, String> result = new HashMap<>();
+        String hex;
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+        String rawAndSalt = userPw+salt;
+
+        // 평문+salt 암호화
+        md.update(rawAndSalt.getBytes());
+        hex = String.format("%064x", new BigInteger(1, md.digest()));
+
+        result.put("HEX", hex);
         return result;
     }
 }
