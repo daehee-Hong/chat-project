@@ -6,6 +6,41 @@
             resultType="com.chatProject.chat.chat.dto.ChatDto$chatRoomResult"
             parameterType="com.chatProject.chat.chat.dto.ChatDto$chatRoomReq">
         /* 채팅방 리스트 조회 */
-
+        SELECT
+            AA.CHAT_ROOM_IDX
+             ,AA.CHAT_ROOM_TITLE
+             ,AA.CHAT_ROOM_INTRODUCE
+             ,AA.CHAT_ROOM_REGDATE
+             ,CASE
+                  WHEN AA.CHAT_ROOM_STATUS = 1 THEN '공개'
+                  ELSE '비공개'
+                END CHAT_ROOM_STATUS
+             ,(SELECT COUNT(*) FROM R_CHAT_ROOM_USER_MAPPING_T WHERE CHAT_ROOM_IDX = AA.CHAT_ROOM_IDX ) AS CHAT_USER_COUNT
+             ,BB.USER_ID
+             ,BB.NICK_NAME
+        FROM (
+                 SELECT
+                     A.CHAT_ROOM_IDX
+                      ,A.CHAT_ROOM_TITLE
+                      ,A.CHAT_ROOM_INTRODUCE
+                      ,DATE_FORMAT(A.CHAT_ROOM_REGDATE, '%Y-%m-%i %H:%i') AS CHAT_ROOM_REGDATE
+                      ,A.CHAT_ROOM_STATUS
+                      ,B.USER_STATUS
+                      ,B.USER_IDX
+                 FROM
+                     R_CHAT_ROOM_T AS A
+                         INNER JOIN R_CHAT_ROOM_USER_MAPPING_T AS B
+                                    ON A.CHAT_ROOM_IDX = B.CHAT_ROOM_IDX
+             )AA
+                 INNER JOIN (
+            SELECT
+                USER_IDX
+                 ,USER_ID
+                 ,NICK_NAME
+            FROM
+                R_USER_T
+        )BB ON BB.USER_IDX = AA.USER_IDX
+            AND AA.USER_STATUS = 1 /* 방장 */
+            LIMIT #{start}, #{length}
     </select>
 </mapper>
