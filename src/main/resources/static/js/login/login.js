@@ -32,7 +32,7 @@ function login() {
     console.log('sendObject : ', sendObject);
 
     // 로그인시
-    fetch("/api/v1/login", reqJsonOption('POST', sendObject))
+    fetch("/api/v1/user/login", reqJsonOption('POST', sendObject))
         .then(res => res.json())
         .then(data => {
             if (data.status == 400){

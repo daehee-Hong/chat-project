@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 @RestController
 public class UserRestController {
@@ -37,12 +37,14 @@ public class UserRestController {
         Integer result;
         try{
             result = userService.login(req, request);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
             log.error("Login Error : " + e.getMessage());
             result = -1;
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+
     }
     /**
      * @author daehee
@@ -67,10 +69,10 @@ public class UserRestController {
     }
     /**
      * @author daehee
-     * @param String userId (등록할 사용자 ID)
-     * @param String nickName (등록할 사용자 닉네임)
-     * @param String userPw (등록할 사용자 PW)
-     * @param String userPwTest (등록할 사용자 PW)
+     * @param String userId (사용자 ID)
+     * @param String nickName (사용자 닉네임)
+     * @param String userPw (사용자 PW)
+     * @param String userPwTest (사용자 PW)
      * @return Integer
      * @see -1(회원가입 중 에러), 0(회원가입 실패), 1(회원가입 성공)
      * */

@@ -14,8 +14,10 @@ public class UserController {
     private String loginPage(
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        session.invalidate();
+        if (request.getAttribute("userInfo") != null) {
+            request.getSession(false).invalidate();
+        }
+
         return "/login/login";
     }
 

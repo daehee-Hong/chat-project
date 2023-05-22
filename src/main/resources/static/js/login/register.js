@@ -54,7 +54,7 @@ function register() {
     console.log('sendObject : ', sendObject);
 
     // 회원가입시
-    fetch("/api/v1/user-register", reqJsonOption('POST', sendObject))
+    fetch("/api/v1/user/user-register", reqJsonOption('POST', sendObject))
         .then(res => res.json())
         .then(data => {
             if (data.status == 400){
@@ -98,7 +98,7 @@ function userIdCheck() {
     sendObject.userId = $userId.value;
 
     // ID 중복확인
-    fetch("/api/v1/userIdCheck", reqJsonOption('POST', sendObject))
+    fetch("/api/v1/user/userIdCheck", reqJsonOption('POST', sendObject))
         .then(res => res.json())
         .then(data => {
             if (data.status == 400){
