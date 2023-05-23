@@ -26,6 +26,9 @@ function makeChatTable() {
         bInfo : false,
         scrollX: false,
         ordering: false,
+        oLanguage: {
+            "sEmptyTable": "검색결과가 존재하지 않습니다."
+        },
         ajax : {
             url : "/api/v1/chat/chat-room",
             method : 'POST',
@@ -55,8 +58,13 @@ function makeChatTable() {
             {"data": "chatRoomRegdate", "className" : "text-center vertical-align-middle"},
             {"data": "chatRoomIdx", "className" : "text-center vertical-align-middle",
                 render : function (data, type, row) {
-                console.log(row)
-                    return '<button type="button" class="btn btn-secondary" value=' + data + '>' + "참여" + '</button>'
+                    let html = '';
+                    if (row.isUserIn == 1){
+                        html = '<button type="button" class="btn btn-secondary" value=' + data + '>' + "접속" + '</button>'
+                    }else {
+                        html = '<button type="button" class="btn btn-primary" value=' + data + '>' + "참여" + '</button>'
+                    }
+                    return html;
                 }
             },
         ]

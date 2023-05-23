@@ -14,7 +14,7 @@ public class UserDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class userInfo {
-        private String userIdx;
+        private Long userIdx;
         private String userId;
         private String nickName;
     }

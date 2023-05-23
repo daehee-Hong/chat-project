@@ -15,6 +15,7 @@
              ,AA.CHAT_USER_COUNT
              ,BB.USER_ID
              ,BB.NICK_NAME
+             ,AA.IS_USER_IN             /*현재접속 사용자의 채팅방참가여부 1=참가, 0=미참가*/
         FROM (
                  SELECT
                      A.CHAT_ROOM_IDX
@@ -28,6 +29,10 @@
                       ,(SELECT COUNT(*) FROM R_CHAT_ROOM_USER_MAPPING_T WHERE CHAT_ROOM_IDX = A.CHAT_ROOM_IDX ) AS CHAT_USER_COUNT
                       ,B.USER_STATUS
                       ,B.USER_IDX
+                    ,CASE
+                    WHEN B.USER_IDX = #{userIdx} THEN 1
+                    ELSE 0
+                    END IS_USER_IN
                  FROM
                      R_CHAT_ROOM_T AS A
                          INNER JOIN R_CHAT_ROOM_USER_MAPPING_T AS B
@@ -44,13 +49,13 @@
             AND AA.USER_STATUS = 1 /* 방장 */
             WHERE 1=1
             <choose>
-                <when test="searchType == 1">
+                <when test="searchType == 1"> /* 제목 */
                     AND (CHAT_ROOM_TITLE LIKE CONCAT('%',#{searchText},'%'))
                 </when>
-                <when test="searchType == 2">
+                <when test="searchType == 2"> /* 방장 */
                     AND (NICK_NAME LIKE CONCAT('%',#{searchText},'%'))
                 </when>
-                <otherwise>
+                <otherwise>                   /* 제목/방장 */
                     AND (CHAT_ROOM_TITLE LIKE CONCAT('%',#{searchText},'%')
                     OR NICK_NAME LIKE CONCAT('%',#{searchText},'%'))
                 </otherwise>

@@ -12,6 +12,7 @@ public class ChatDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class chatRoomReq {
+        private Long userIdx;
         private Integer draw;
         private Integer recordsTotal;
         private Integer recordsFiltered;
@@ -19,6 +20,10 @@ public class ChatDto {
         private Integer length;
         private Integer searchType;
         private String searchText;
+
+        public void setUserIdx(Long userIdx){
+            this.userIdx = userIdx;
+        }
     }
 
     @Getter
@@ -33,6 +38,7 @@ public class ChatDto {
         private Integer chatUserCount;
         private String userId;
         private String nickName;
+        private Integer isUserIn;
     }
 
     @Getter

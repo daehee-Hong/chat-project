@@ -4,6 +4,7 @@ import com.chatProject.chat.chat.dto.ChatDto;
 import com.chatProject.chat.chat.service.ChatService;
 import com.chatProject.chat.user.dto.UserDto;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,14 +32,17 @@ public class ChatRestController {
     @PostMapping("/chat-room")
     private ResponseEntity selectChatRoom(
             @RequestBody ChatDto.chatRoomReq req,
-            HttpServletRequest request
+            HttpSession session
     ) {
         try{
+            UserDto.userInfo userInfo = (UserDto.userInfo) session.getAttribute("userInfo");
+            req.setUserIdx(userInfo.getUserIdx());
+
             ChatDto.chatRoomRes chatRoomRes = chatService.selectChatRoom(req);
             return new ResponseEntity<>(chatRoomRes, HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
-            log.error("Login Error : " + e.getMessage());
+            log.error("selectChatRoom Error : " + e.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
