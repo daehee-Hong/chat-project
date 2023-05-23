@@ -116,3 +116,9 @@ body {
 .space-around {
     justify-content: space-around !important;
 }
+.vertical-align-middle {
+    vertical-align: middle !important;
+}
+.pl-30 {
+    padding-left: 30px;
+}

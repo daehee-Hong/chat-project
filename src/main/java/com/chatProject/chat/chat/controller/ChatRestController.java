@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @Slf4j
 @RequestMapping("/api/v1/chat")
 @RequiredArgsConstructor
@@ -31,17 +33,13 @@ public class ChatRestController {
             @RequestBody ChatDto.chatRoomReq req,
             HttpServletRequest request
     ) {
-        Integer result = 1;
         try{
-            log.info("req : " + "");
-            log.info(request.toString());
-            chatService.selectChatRoom(req);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            ChatDto.chatRoomRes chatRoomRes = chatService.selectChatRoom(req);
+            return new ResponseEntity<>(chatRoomRes, HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
             log.error("Login Error : " + e.getMessage());
-            result = -1;
-            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }

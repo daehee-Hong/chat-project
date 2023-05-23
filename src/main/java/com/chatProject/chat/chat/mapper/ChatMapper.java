@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface ChatMapper {
     List<ChatDto.chatRoomResult> selectChatRoom(ChatDto.chatRoomReq req);
+
+    Integer selectChatRoomTotal(ChatDto.chatRoomReq req);
 }
