@@ -122,3 +122,11 @@ body {
 .pl-30 {
     padding-left: 30px;
 }
+.direction-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.pr-1rem {
+    padding-right: 1rem !important;
+}

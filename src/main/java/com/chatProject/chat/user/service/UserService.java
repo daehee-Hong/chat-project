@@ -3,12 +3,14 @@ package com.chatProject.chat.user.service;
 import com.chatProject.chat.common.Utils.Utils;
 import com.chatProject.chat.user.dto.UserDto;
 import com.chatProject.chat.user.mapper.UserMapper;
+import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -21,10 +23,10 @@ public class UserService{
     private UserMapper userMapper;
 
     public Integer login(UserDto.userLoginReq req, HttpServletRequest request) throws NoSuchAlgorithmException {
-        // SALT 조회 (없으면 ERROR)
+        // 사용자 조회 (없으면 존재하지않는 ID)
         UserDto.userLoginCheck loginCheck = userMapper.userCheck(req);
-        if ("".equals(loginCheck.getSalt()) || loginCheck.getSalt() == null){
-            return -1;
+        if (ObjectUtils.isEmpty(loginCheck)){
+            return 0;
         }
         // 로그인 중 비밀번호 매칭확인
         Map<String, String> alg = Utils.makeHexByPwAndSalt(req.getUserPw(), loginCheck.getSalt());

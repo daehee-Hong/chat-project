@@ -11,6 +11,12 @@ function setLoginPageEvent() {
         .addEventListener('click', () => {
             location.href="/user/register";
         })
+    document.getElementById('inputPassword')
+        .addEventListener('keyup', ()=> {
+            if (window.event.keyCode == 13) {
+                login();
+            }
+        })
 }
 
 function login() {
@@ -40,7 +46,7 @@ function login() {
                 return;
             }
             if (data == 0){
-                sweetAlert('waring', '유효성검사', 'ID 또는 비밀번호가 다릅니다.', 3000);
+                sweetAlert('info', '유효성검사', 'ID 또는 비밀번호가 다릅니다.', 3000);
                 return;
             }else if (data == -1){
                 sweetAlert('waring', '에러발생', '로그인 중 에러가 발생했습니다.', 3000);

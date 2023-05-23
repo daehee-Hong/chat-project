@@ -13,4 +13,9 @@ public class ChatController {
     private String chatMainPage() {
         return "/chat/mainChat";
     }
+
+    @GetMapping("/register")
+    private String chatRegisterPage() {
+        return "/chat/chatRegister";
+    }
 }

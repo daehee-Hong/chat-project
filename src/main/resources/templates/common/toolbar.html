@@ -11,7 +11,8 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <ul class="navbar-nav px-3">
-      <li class="nav-item text-nowrap">
+      <li class="nav-item text-nowrap direction-row">
+        <a class="nav-link pr-1rem" id="userInfoBtn" th:value="${session.userInfo.userIdx}"  th:text="${session.userInfo.nickName}"></a>
         <a class="nav-link" href="/user/login">로그아웃</a>
       </li>
     </ul>

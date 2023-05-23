@@ -5,7 +5,7 @@ window.onload = function() {
 
 function setMainChatRoomPageEvent() {
     document.getElementById('searchText')
-        .addEventListener('keyup', function (){
+        .addEventListener('keyup',  ()=>{
             if (window.event.keyCode == 13) {
                 $('#chat-table').DataTable().ajax.reload();            }
         })
@@ -46,7 +46,6 @@ function makeChatTable() {
         },
         rowId : "chatRoomIdx",
         columns : [
-            //{"data": "rownum", "className" : "text-center vertical-align-middle"},
             { "data": null,"sortable": false, "className" : "text-center vertical-align-middle",
                 render: function (data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
