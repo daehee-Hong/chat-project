@@ -1,5 +1,6 @@
 package com.chatProject.chat.user.controller;
 
+import com.chatProject.chat.common.dto.CommonDto;
 import com.chatProject.chat.user.dto.UserDto;
 
 import com.chatProject.chat.user.service.UserService;
@@ -80,13 +81,13 @@ public class UserRestController {
     private ResponseEntity userRegister(
             @Valid @RequestBody UserDto.userRegisterReq req
     ){
-        UserDto.userRegisterRes result = null;
+        CommonDto.commentRes result = null;
         try{
             result = userService.userRegister(req);
             return new ResponseEntity<>(result, HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
             log.error("userRegister Error : " + e.getMessage());
-            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new CommonDto.commentRes("서버에러", "잠시후 다시 시도해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }}

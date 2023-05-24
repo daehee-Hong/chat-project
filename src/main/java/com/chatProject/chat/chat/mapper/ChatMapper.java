@@ -1,13 +1,18 @@
 package com.chatProject.chat.chat.mapper;
 
-import com.chatProject.chat.chat.dto.ChatDto;
+
+import com.chatProject.chat.chat.dto.ChatRoomDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 @Mapper
 public interface ChatMapper {
-    List<ChatDto.chatRoomResult> selectChatRoom(ChatDto.chatRoomReq req);
+    List<ChatRoomDto.chatRoomResult> selectChatRoom(ChatRoomDto.chatRoomReq req);
 
-    Integer selectChatRoomTotal(ChatDto.chatRoomReq req);
+    Integer selectChatRoomTotal(ChatRoomDto.chatRoomReq req);
+
+    Integer insertChatRoom(ChatRoomDto.chatRoomRegisterReq req);
+
+    Integer insertChatRoomMapping(ChatRoomDto.chatRoomRegisterReq req);
 }

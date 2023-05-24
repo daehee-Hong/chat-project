@@ -1,21 +1,21 @@
 package com.chatProject.chat.chat.dto;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.lang.ref.PhantomReference;
 import java.util.List;
 
-public class ChatDto {
+public class ChatRoomDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class chatRoomReq {
         private Long userIdx;
         private Integer draw;
-        private Integer recordsTotal;
-        private Integer recordsFiltered;
         private Integer start;
         private Integer length;
         private Integer searchType;
@@ -51,6 +51,31 @@ public class ChatDto {
         private Integer recordsTotal;
         private Integer recordsFiltered;
         private List<chatRoomResult> list;
+    }
 
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class chatRoomRegisterReq {
+        private Long chatRoomIdx;
+        private Long userIdx;
+        @NotBlank
+        private String chatRoomTitle;
+        private String chatRoomIntroduce;
+        @NotNull
+        private Integer chatRoomStatus;
+        private String chatRoomPw;
+        private String chatRoomPwTest;
+        private String salt;
+        private String hex;
+
+        public void setUserIdx(Long userIdx){
+            this.userIdx = userIdx;
+        }
+
+        public void setSaltAndHex(String salt, String hex){
+            this.salt = salt;
+            this.hex = hex;
+        }
     }
 }

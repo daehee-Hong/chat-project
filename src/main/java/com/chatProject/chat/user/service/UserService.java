@@ -1,6 +1,7 @@
 package com.chatProject.chat.user.service;
 
 import com.chatProject.chat.common.Utils.Utils;
+import com.chatProject.chat.common.dto.CommonDto;
 import com.chatProject.chat.user.dto.UserDto;
 import com.chatProject.chat.user.mapper.UserMapper;
 import io.micrometer.common.util.StringUtils;
@@ -51,15 +52,15 @@ public class UserService{
         return result;
     }
 
-    public UserDto.userRegisterRes userRegister(UserDto.userRegisterReq req) throws NoSuchAlgorithmException {
+    public CommonDto.commentRes userRegister(UserDto.userRegisterReq req) throws NoSuchAlgorithmException {
         // ID 중복 교차 확인
         if (userMapper.userIdCheck(new UserDto.userIdCheckReq(req.getUserId())) == 1){
-            return new UserDto.userRegisterRes("ID 중복", "이미 존재하는 ID입니다");
+            return new CommonDto.commentRes("ID 중복", "이미 존재하는 ID입니다");
         }
 
         // PW 값 상이한지 확인
         if (!req.getUserPw().equals(req.getUserPwTest())){
-            return new UserDto.userRegisterRes("PW 상이", "비밀번호가 같지않습니다.");
+            return new CommonDto.commentRes("PW 상이", "비밀번호가 같지않습니다.");
         }
 
         // SALT 생성 및 PW SHA256 암호화
@@ -69,9 +70,9 @@ public class UserService{
         Integer userRegister = userMapper.userRegister(req);
 
         if (userRegister == 1){
-            return new UserDto.userRegisterRes("등록완료", "회원가입이 완료되었습니다.");
+            return new CommonDto.commentRes("등록완료", "회원가입이 완료되었습니다.");
         }else {
-            return new UserDto.userRegisterRes("에러", "회원가입중 에러가발생하였습니다.");
+            return new CommonDto.commentRes("에러", "회원가입중 에러가발생하였습니다.");
         }
 
     }

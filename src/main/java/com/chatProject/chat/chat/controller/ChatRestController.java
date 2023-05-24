@@ -1,7 +1,9 @@
 package com.chatProject.chat.chat.controller;
 
-import com.chatProject.chat.chat.dto.ChatDto;
+
+import com.chatProject.chat.chat.dto.ChatRoomDto;
 import com.chatProject.chat.chat.service.ChatService;
+import com.chatProject.chat.common.dto.CommonDto;
 import com.chatProject.chat.user.dto.UserDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("/api/v1/chat")
@@ -24,27 +27,65 @@ public class ChatRestController {
 
     /**
      * @author daehee
-     * @param String searchText (사용자 ID)
-     * @param String pa (사용자 PW)
-     * @return Integer
-     * @see -1(로그인 중 에러), 0(로그인 실패), 1(로그인 성공)
+     * @param Long userIdx (사용자 IDX)
+     * @param Integer draw (현재 페이지)
+     * @param Integer start (조회 시작값)
+     * @param Integer length (조회 종료값)
+     * @param Integer searchType (검색 조건 (1=제목,2=작성자))
+     * @param String searchText (검색내용)
+     * @return List<chatRoomRes>
+     * @see 채팅방 리스트 조회
      * */
     @PostMapping("/chat-room")
     private ResponseEntity selectChatRoom(
-            @RequestBody ChatDto.chatRoomReq req,
+            @RequestBody ChatRoomDto.chatRoomReq req,
             HttpSession session
     ) {
         try{
+
             UserDto.userInfo userInfo = (UserDto.userInfo) session.getAttribute("userInfo");
             req.setUserIdx(userInfo.getUserIdx());
 
-            ChatDto.chatRoomRes chatRoomRes = chatService.selectChatRoom(req);
+            ChatRoomDto.chatRoomRes chatRoomRes = chatService.selectChatRoom(req);
             return new ResponseEntity<>(chatRoomRes, HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
             log.error("selectChatRoom Error : " + e.getMessage());
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
+
+    /**
+     * @author daehee
+     * @param Long chatRoomIdx (채팅방 등록 후 IDX)
+     * @param Long userIdx (사용자 IDX)
+     * @param String chatRoomTitle (채팅방 제목)
+     * @param String chatRoomIntroduce (채팅방 소개)
+     * @param Integer chatRoomStatus (채팅방 공개여부 (1=공개,0=미공개))
+     * @param String chatRoomPw (채팅방 비밀번호)
+     * @param String chatRoomPwTest (채팅방 비밀번호 확인)
+     * @param String salt (채팅방 비밀번호 SALT값)
+     * @param String hex (채팅방 비밀번호 암호화값)
+     * @return List<chatRoomRes>
+     * @see 채팅방 리스트 조회
+     * */
+    @PostMapping("/chat-room-register")
+    private ResponseEntity insertChatRoom(
+            @Valid @RequestBody ChatRoomDto.chatRoomRegisterReq req,
+            HttpSession session
+    ) {
+        CommonDto.commentRes result;
+        try{
+            UserDto.userInfo userInfo = (UserDto.userInfo) session.getAttribute("userInfo");
+            req.setUserIdx(userInfo.getUserIdx());
+
+            result = chatService.insertChatRoom(req);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("selectChatRoom Error : " + e.getMessage());
+            return new ResponseEntity<>(new CommonDto.commentRes("서버에러", "잠시후 다시 시도해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

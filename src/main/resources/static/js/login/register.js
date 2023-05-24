@@ -57,15 +57,16 @@ function register() {
     fetch("/api/v1/user/user-register", reqJsonOption('POST', sendObject))
         .then(res => res.json())
         .then(data => {
+            const title = data.title;
+            const comment = data.comment;
+
             if (data.status == 400){
                 sweetAlert('error', '유효성검사', '값을 전부 입력해주세요', 3000);
                 return;
             }else if (data.status == 500){
-                sweetAlert('error', '회원가입 실패', '회원가입 중 에러가 발생했습니다.', 3000);
+                sweetAlert('error', title, comment, 3000);
                 return;
             }
-                const title = data.title;
-                const comment = data.comment;
 
                 if (title == '등록완료'){
                     Swal.fire({

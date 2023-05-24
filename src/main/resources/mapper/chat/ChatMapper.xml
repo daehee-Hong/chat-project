@@ -3,8 +3,8 @@
 
 <mapper namespace="com.chatProject.chat.chat.mapper.ChatMapper">
     <select id="selectChatRoom"
-            resultType="com.chatProject.chat.chat.dto.ChatDto$chatRoomResult"
-            parameterType="com.chatProject.chat.chat.dto.ChatDto$chatRoomReq">
+            resultType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomResult"
+            parameterType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomReq">
         /* 채팅방 리스트 조회 */
         SELECT
              AA.CHAT_ROOM_IDX
@@ -65,7 +65,7 @@
     </select>
     <select id="selectChatRoomTotal"
             resultType="Integer"
-            parameterType="com.chatProject.chat.chat.dto.ChatDto$chatRoomReq">
+            parameterType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomReq">
         /* 채팅방 리스트 총 건수 조회 */
         SELECT
             COUNT(*)
@@ -110,4 +110,46 @@
             </otherwise>
         </choose>
     </select>
+    <insert id="insertChatRoom"
+            parameterType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomRegisterReq"
+            useGeneratedKeys="true" keyColumn="chatRoomIdx" keyProperty="chatRoomIdx">
+        /* 채팅방 등록 */
+        INSERT INTO
+            R_CHAT_ROOM_T
+            (
+                CHAT_ROOM_TITLE
+                ,CHAT_ROOM_INTRODUCE
+                ,CHAT_ROOM_REGDATE
+                ,CHAT_ROOM_STATUS
+                <if test="chatRoomStatus == 0">
+                ,CHAT_ROOM_PW
+                ,SALT
+                </if>
+            )VALUES
+            (
+                #{chatRoomTitle}
+                ,#{chatRoomIntroduce}
+                ,DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+                ,#{chatRoomStatus}
+                <if test="chatRoomStatus == 0">
+                    ,#{hex}
+                    ,#{salt}
+                </if>
+            )
+    </insert>
+    <insert id="insertChatRoomMapping">
+        /* 채팅방 사용자 등록 (최초) */
+        INSERT INTO
+            R_CHAT_ROOM_USER_MAPPING_T
+            (
+                CHAT_ROOM_IDX
+                ,USER_IDX
+                ,USER_STATUS
+            )VALUES
+            (
+                #{chatRoomIdx}
+                ,#{userIdx}
+                ,1
+            )
+    </insert>
 </mapper>
