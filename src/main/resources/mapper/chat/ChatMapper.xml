@@ -21,7 +21,7 @@
                      A.CHAT_ROOM_IDX
                       ,A.CHAT_ROOM_TITLE
                       ,A.CHAT_ROOM_INTRODUCE
-                      ,DATE_FORMAT(A.CHAT_ROOM_REGDATE, '%Y-%m-%i %H:%i') AS CHAT_ROOM_REGDATE
+                      ,DATE_FORMAT(A.CHAT_ROOM_REGDATE, '%Y-%m-%d %H:%i') AS CHAT_ROOM_REGDATE
                       ,CASE
                            WHEN A.CHAT_ROOM_STATUS = 1 THEN '공개'
                            ELSE '비공개'

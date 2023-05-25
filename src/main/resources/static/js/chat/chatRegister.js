@@ -71,7 +71,7 @@ function chatRoomRegister() {
                     confirmButtonText: '확인',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        console.log('완료')
+                        location.href="/chat/main";
                     }
                 })
             }else {

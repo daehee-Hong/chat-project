@@ -19,7 +19,7 @@ function makeChatTable() {
         paging: true,
         searching: false,
         lengthChange : true,          // 페이지 조회 시 row를 변경할 것인지
-        pageLength : 1,           // lengthChange가 false인 경우 조회 row 수
+        pageLength : 5,           // lengthChange가 false인 경우 조회 row 수
         processing : true,
         serverSide : true,        // serverside 사용 여부
         dom: 'rtip',
@@ -55,6 +55,7 @@ function makeChatTable() {
             {"data": "nickName", "className" : "text-center vertical-align-middle"},
             {"data": "chatUserCount", "className" : "text-center vertical-align-middle"},
             {"data": "chatRoomRegdate", "className" : "text-center vertical-align-middle"},
+            {"data": "chatRoomStatus", "className" : "text-center vertical-align-middle",},
             {"data": "chatRoomIdx", "className" : "text-center vertical-align-middle",
                 render : function (data, type, row) {
                     let html = '';
