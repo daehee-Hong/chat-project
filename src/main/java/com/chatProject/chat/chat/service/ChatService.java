@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -53,6 +54,27 @@ public class ChatService {
             return new CommonDto.commentRes("등록완료", "채팅방이 등록되었습니다.");
         }else {
             return new CommonDto.commentRes("서버에러", "잠시후 다시 시도해주세요.");
+        }
+    }
+
+    public CommonDto.commentRes chatRoomPwCheck(ChatRoomDto.chatRoomPwCheckReq req) throws NoSuchAlgorithmException {
+        // 채팅방 존재 확인
+        ChatRoomDto.chatRoomPwCheck chatRoomCheck = chatMapper.chatRoomCheck(req);
+        if (ObjectUtils.isEmpty(chatRoomCheck)){
+            return new CommonDto.commentRes("채팅방이 없습니다.", "새로고침을 해주세요.");
+        }
+        // 비공개여부확인
+        if (!"비공개".equals(chatRoomCheck.getChatRoomStatus())){
+            return new CommonDto.commentRes("비공개 채팅방이 아닙니다.", "다시시도 해주세요.");
+        }
+        // 비밀번호 매칭확인
+        Map<String, String> alg = Utils.makeHexByPwAndSalt(req.getChatRoomPw(), chatRoomCheck.getSalt());
+        if (!alg.get("HEX").equals(chatRoomCheck.getChatRoomPw())){
+            // 비밀번호 상이
+            return new CommonDto.commentRes("유효성검사", "비밀번호가 다릅니다.");
+        }else {
+            // 비밀번호 매칭
+            return new CommonDto.commentRes("접속완료", "");
         }
     }
 }

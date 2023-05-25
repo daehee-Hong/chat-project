@@ -152,4 +152,21 @@
                 ,1
             )
     </insert>
+    <select id="chatRoomCheck"
+            resultType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomPwCheck"
+            parameterType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomPwCheckReq">
+        /* 채팅방 확인 */
+        SELECT
+            CHAT_ROOM_IDX
+             ,CASE
+                  WHEN CHAT_ROOM_STATUS = 0 THEN '비공개'
+                  ELSE '공개'
+            END CHAT_ROOM_STATUS
+             ,CHAT_ROOM_PW
+             ,salt
+        FROM
+            R_CHAT_ROOM_T
+        WHERE 1=1
+          AND CHAT_ROOM_IDX = #{chatRoomIdx}
+    </select>
 </mapper>

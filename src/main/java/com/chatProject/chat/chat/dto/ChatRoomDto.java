@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.lang.ref.PhantomReference;
 import java.util.List;
 
 public class ChatRoomDto {
@@ -77,5 +78,27 @@ public class ChatRoomDto {
             this.salt = salt;
             this.hex = hex;
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class chatRoomPwCheckReq {
+        private Long userIdx;
+        private Long chatRoomIdx;
+        private String chatRoomPw;
+
+        public void setUserIdx(Long userIdx){
+            this.userIdx = userIdx;
+        }
+    }
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class chatRoomPwCheck {
+        private Long chatRoomIdx;
+        private String chatRoomStatus;
+        private String chatRoomPw;
+        private String salt;
     }
 }
