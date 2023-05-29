@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -74,7 +73,35 @@ public class ChatService {
             return new CommonDto.commentRes("유효성검사", "비밀번호가 다릅니다.");
         }else {
             // 비밀번호 매칭
+            Integer check = chatMapper.isUserInCheckRoom(req);
+            if (check == 0){
+                chatMapper.insertChatUserMapping(req);
+            }
+
             return new CommonDto.commentRes("접속완료", "");
         }
+    }
+
+    public Integer chatRoomPageCheck(ChatRoomDto.chatRoomPwCheckReq req) {
+        // 비공개 방인지 확인
+        ChatRoomDto.chatRoomPwCheck chatRoomCheck = chatMapper.chatRoomCheck(req);
+        if (ObjectUtils.isEmpty(chatRoomCheck)){
+            return -1;
+        }
+        // 비공개여부확인
+        Integer check = chatMapper.isUserInCheckRoom(req);
+        if ("비공개".equals(chatRoomCheck.getChatRoomStatus())){
+            if (check == 0){
+                return -1;
+            }else {
+                return 1;
+            }
+        }else {
+            if (check == 0){
+                chatMapper.insertChatUserMapping(req);
+            }
+            return 1;
+        }
+
     }
 }

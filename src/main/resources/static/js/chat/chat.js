@@ -106,19 +106,20 @@ function setMainChatRoomPageEvent() {
                         },
                         allowOutsideClick: () => !Swal.isLoading()
                     }).then((result) => {
+                        if (result == null) return;
                         const res = result.value;
 
                         if (res.title == '접속완료'){
-                            console.log('이동');
+                            location.href = "/chat/chat-room/" + chatRoomIdx;
                         }else {
                             sweetAlert('warning', res.title, res.comment, 3000);
                             return;
                         }
                     })
+                }else {// 공개
+                    location.href = "/chat/chat-room/" + chatRoomIdx;
                 }
-                // 공개
 
-                
             })
         })
 }

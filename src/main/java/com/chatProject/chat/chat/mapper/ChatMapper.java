@@ -17,4 +17,9 @@ public interface ChatMapper {
     Integer insertChatRoomMapping(ChatRoomDto.chatRoomRegisterReq req);
 
     ChatRoomDto.chatRoomPwCheck chatRoomCheck(ChatRoomDto.chatRoomPwCheckReq req);
+
+    Integer insertChatUserMapping(ChatRoomDto.chatRoomPwCheckReq req);
+
+    Integer isUserInCheckRoom(ChatRoomDto.chatRoomPwCheckReq req);
+
 }

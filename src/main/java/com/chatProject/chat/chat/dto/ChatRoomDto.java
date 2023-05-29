@@ -101,4 +101,13 @@ public class ChatRoomDto {
         private String chatRoomPw;
         private String salt;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class chatRoomPageCheck {
+        private Long chatRoomIdx;
+        private Long userIdx;
+
+    }
 }

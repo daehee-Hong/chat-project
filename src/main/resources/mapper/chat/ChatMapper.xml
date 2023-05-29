@@ -169,4 +169,33 @@
         WHERE 1=1
           AND CHAT_ROOM_IDX = #{chatRoomIdx}
     </select>
+    <select id="isUserInCheckRoom"
+            resultType="Integer"
+            parameterType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomPwCheckReq">
+        /* 채팅방 사용자 확인 */
+        SELECT
+            COUNT(*)
+        FROM
+            R_CHAT_ROOM_USER_MAPPING_T
+        WHERE 1=1
+          AND CHAT_ROOM_IDX = #{chatRoomIdx}
+          AND USER_IDX = #{userIdx}
+    </select>
+    <insert id="insertChatUserMapping"
+            parameterType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomPwCheckReq">
+        /* 채팅방 사용자 추가 */
+        INSERT INTO
+            R_CHAT_ROOM_USER_MAPPING_T
+        (
+            CHAT_ROOM_IDX
+        ,USER_IDX
+        ,USER_STATUS
+        )VALUES
+            (
+                #{chatRoomIdx}
+            ,#{userIdx}
+            ,0
+            )
+    </insert>
+
 </mapper>
