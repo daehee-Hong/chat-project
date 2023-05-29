@@ -106,7 +106,7 @@ function setMainChatRoomPageEvent() {
                         },
                         allowOutsideClick: () => !Swal.isLoading()
                     }).then((result) => {
-                        if (result == null) return;
+                        if (result.value == null) return;
                         const res = result.value;
 
                         if (res.title == '접속완료'){

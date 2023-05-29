@@ -7,17 +7,20 @@
             parameterType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomReq">
         /* 채팅방 리스트 조회 */
         SELECT
-             AA.CHAT_ROOM_IDX
-             ,AA.CHAT_ROOM_TITLE
-             ,AA.CHAT_ROOM_INTRODUCE
-             ,AA.CHAT_ROOM_REGDATE
-             ,AA.CHAT_ROOM_STATUS
-             ,AA.CHAT_USER_COUNT
-             ,BB.USER_ID
-             ,BB.NICK_NAME
-             ,AA.IS_USER_IN             /*현재접속 사용자의 채팅방참가여부 1=참가, 0=미참가*/
-        FROM (
-                 SELECT
+            	AA.CHAT_ROOM_IDX
+	             ,AA.CHAT_ROOM_TITLE
+	             ,AA.CHAT_ROOM_INTRODUCE
+	             ,AA.CHAT_ROOM_REGDATE
+	             ,AA.CHAT_ROOM_STATUS
+	             ,(SELECT COUNT(USER_IDX) FROM R_CHAT_ROOM_USER_MAPPING_T WHERE AA.CHAT_ROOM_IDX = CHAT_ROOM_IDX) CHAT_USER_COUNT
+	             ,BB.USER_ID
+	             ,BB.NICK_NAME
+	             ,CASE
+		             WHEN CC.USER_IDX IS NOT NULL THEN 1
+		             ELSE 0
+		          END IS_USER_IN
+            FROM (
+				SELECT
                      A.CHAT_ROOM_IDX
                       ,A.CHAT_ROOM_TITLE
                       ,A.CHAT_ROOM_INTRODUCE
@@ -26,27 +29,13 @@
                            WHEN A.CHAT_ROOM_STATUS = 1 THEN '공개'
                            ELSE '비공개'
                      END CHAT_ROOM_STATUS
-                      ,(SELECT COUNT(*) FROM R_CHAT_ROOM_USER_MAPPING_T WHERE CHAT_ROOM_IDX = A.CHAT_ROOM_IDX ) AS CHAT_USER_COUNT
-                      ,B.USER_STATUS
-                      ,B.USER_IDX
-                    ,CASE
-                    WHEN B.USER_IDX = #{userIdx} THEN 1
-                    ELSE 0
-                    END IS_USER_IN
                  FROM
                      R_CHAT_ROOM_T AS A
-                         INNER JOIN R_CHAT_ROOM_USER_MAPPING_T AS B
-                                    ON A.CHAT_ROOM_IDX = B.CHAT_ROOM_IDX
-             )AA
-                 INNER JOIN (
-            SELECT
-                USER_IDX
-                 ,USER_ID
-                 ,NICK_NAME
-            FROM
-                R_USER_T
-        )BB ON BB.USER_IDX = AA.USER_IDX
-            AND AA.USER_STATUS = 1 /* 방장 */
+                 )AA
+                 LEFT JOIN (SELECT CHAT_ROOM_IDX, USER_ID, NICK_NAME FROM R_CHAT_ROOM_USER_MAPPING_T A, R_USER_T B WHERE A.USER_IDX = B.USER_IDX AND A.USER_STATUS = 1) BB
+                 ON AA.CHAT_ROOM_IDX = BB.CHAT_ROOM_IDX
+                 LEFT JOIN (SELECT CHAT_ROOM_IDX, USER_IDX FROM R_CHAT_ROOM_USER_MAPPING_T WHERE USER_IDX = #{userIdx}) CC
+                 ON AA.CHAT_ROOM_IDX = CC.CHAT_ROOM_IDX
             WHERE 1=1
             <choose>
                 <when test="searchType == 1"> /* 제목 */

@@ -35,7 +35,7 @@ public class ChatController {
     ) {
         UserDto.userInfo userInfo = (UserDto.userInfo) session.getAttribute("userInfo");
 
-        Integer result = chatService.chatRoomPageCheck(new ChatRoomDto.chatRoomPwCheckReq(chatRoomIdx, userInfo.getUserIdx(), ""));
+        Integer result = chatService.chatRoomPageCheck(new ChatRoomDto.chatRoomPwCheckReq(userInfo.getUserIdx(), chatRoomIdx, ""));
         if (result == 1){
             return "/chat/chatPage";
         }else {
