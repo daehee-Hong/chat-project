@@ -1,5 +1,6 @@
 package com.chatProject.chat.chat.dto;
 
+import com.chatProject.chat.user.dto.UserDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -108,6 +109,35 @@ public class ChatRoomDto {
     public static class chatRoomPageCheck {
         private Long chatRoomIdx;
         private Long userIdx;
+    }
 
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class chatRoomPageRes {
+        private Long chatRoomIdx;
+        private String chatRoomTitle;
+        private String chatRoomIntroduce;
+        private String chatRoomRegdate;
+        private Integer chatRoomStatus;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class chatRoomUser {
+        private Long userIdx;
+        private Integer userStatus;
+        private Integer userLoginStatus = 0;
+        private String userId;
+        private String nickName;
+
+        public void setUserLoginStatus(List<UserDto.userInfo> users) {
+            for (UserDto.userInfo user : users) {
+                if (user.getUserIdx() == this.userIdx){
+                    this.userLoginStatus = 1;
+                }
+            }
+        }
     }
 }

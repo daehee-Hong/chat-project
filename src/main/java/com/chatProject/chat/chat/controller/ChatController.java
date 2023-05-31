@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ public class ChatController {
 
     @GetMapping("/main")
     private String chatMainPage() {
+
         return "/chat/mainChat";
     }
 
@@ -31,12 +33,14 @@ public class ChatController {
     @GetMapping("/chat-room/{id}")
     private String chatPage(
             @PathVariable("id") Long chatRoomIdx,
-            HttpSession session
+            HttpSession session,
+            Model model
     ) {
         UserDto.userInfo userInfo = (UserDto.userInfo) session.getAttribute("userInfo");
 
         Integer result = chatService.chatRoomPageCheck(new ChatRoomDto.chatRoomPwCheckReq(userInfo.getUserIdx(), chatRoomIdx, ""));
         if (result == 1){
+            model.addAttribute("chatRoomDetail", chatService.selectChatRoomPageDetail(chatRoomIdx));
             return "/chat/chatPage";
         }else {
             return "/error/error";

@@ -22,4 +22,7 @@ public interface ChatMapper {
 
     Integer isUserInCheckRoom(ChatRoomDto.chatRoomPwCheckReq req);
 
+    ChatRoomDto.chatRoomPageRes selectChatRoomPageDetail(Long chatRoomIdx);
+
+    List<ChatRoomDto.chatRoomUser> selectChatRoomUserList(ChatRoomDto.chatRoomPwCheckReq req);
 }

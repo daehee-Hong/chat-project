@@ -186,5 +186,37 @@
             ,0
             )
     </insert>
+    <select id="selectChatRoomPageDetail"
+            resultType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomPageRes"
+            parameterType="Long">
+        /* 채팅방 상세정보 */
+        SELECT
+            CHAT_ROOM_IDX
+             ,CHAT_ROOM_TITLE
+             ,CHAT_ROOM_INTRODUCE
+             ,CHAT_ROOM_REGDATE
+             ,CHAT_ROOM_STATUS
+        FROM
+            R_CHAT_ROOM_T
+        WHERE
+            CHAT_ROOM_IDX = #{id};
+    </select>
+    <select id="selectChatRoomUserList"
+            resultType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomUser"
+            parameterType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomPwCheckReq">
+        /* 채팅방 사용자 리스트 조회 */
+        SELECT
+            A.USER_IDX
+             ,A.USER_STATUS
+             ,B.USER_ID
+             ,B.NICK_NAME
+        FROM
+            R_CHAT_ROOM_USER_MAPPING_T A
+                LEFT JOIN R_USER_T B
+                          ON A.USER_IDX = B.USER_IDX
+        WHERE 1=1
+          AND CHAT_ROOM_IDX = #{chatRoomIdx}
+        ORDER BY A.USER_STATUS DESC, B.NICK_NAME ASC
+    </select>
 
 </mapper>

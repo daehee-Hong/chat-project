@@ -2,6 +2,7 @@ package com.chatProject.chat.user.service;
 
 import com.chatProject.chat.common.Utils.Utils;
 import com.chatProject.chat.common.dto.CommonDto;
+import com.chatProject.chat.common.users.LoginUserManager;
 import com.chatProject.chat.user.dto.UserDto;
 import com.chatProject.chat.user.mapper.UserMapper;
 import io.micrometer.common.util.StringUtils;
@@ -40,6 +41,8 @@ public class UserService{
 
             HttpSession session = request.getSession();
             session.setAttribute("userInfo", userInfo);
+
+            LoginUserManager.addUser(userInfo);
 
             return 1;
         }

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Map;
 
 @Slf4j
@@ -90,17 +91,11 @@ public class ChatRestController {
 
     /**
      * @author daehee
-     * @param Long chatRoomIdx (채팅방 등록 후 IDX)
+     * @param Long chatRoomIdx (채팅방 IDX)
      * @param Long userIdx (사용자 IDX)
-     * @param String chatRoomTitle (채팅방 제목)
-     * @param String chatRoomIntroduce (채팅방 소개)
-     * @param Integer chatRoomStatus (채팅방 공개여부 (1=공개,0=미공개))
      * @param String chatRoomPw (채팅방 비밀번호)
-     * @param String chatRoomPwTest (채팅방 비밀번호 확인)
-     * @param String salt (채팅방 비밀번호 SALT값)
-     * @param String hex (채팅방 비밀번호 암호화값)
      * @return CommonDto.commentRes
-     * @see 채팅방 등록
+     * @see 채팅방 비밀번호 체크
      * */
     @PostMapping("/chat-room-pw-check")
     private ResponseEntity chatRoomPwCheck(
@@ -114,6 +109,29 @@ public class ChatRestController {
 
             result = chatService.chatRoomPwCheck(req);
             return new ResponseEntity<>(result, HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("selectChatRoom Error : " + e.getMessage());
+            return new ResponseEntity<>(new CommonDto.commentRes("서버에러", "잠시후 다시 시도해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * @author daehee
+     * @param Long chatRoomIdx (채팅방 IDX)
+     * @param Long userIdx (사용자 IDX)
+     * @return CommonDto.commentRes
+     * @see 채팅방 사용자 리스트 조회
+     * */
+    @GetMapping("/chat-room-users/{id}")
+    private ResponseEntity chatRoomPageSelectUserList(
+            @PathVariable("id") Long chatRoomIdx,
+            HttpSession session
+    ) {
+        try{
+            UserDto.userInfo userInfo = (UserDto.userInfo) session.getAttribute("userInfo");
+
+            return new ResponseEntity<>(chatService.chatRoomPageSelectUserList(new ChatRoomDto.chatRoomPwCheckReq(userInfo.getUserIdx(), chatRoomIdx, "")), HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
             log.error("selectChatRoom Error : " + e.getMessage());

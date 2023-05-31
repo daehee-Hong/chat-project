@@ -4,6 +4,7 @@ import com.chatProject.chat.chat.dto.ChatRoomDto;
 import com.chatProject.chat.chat.mapper.ChatMapper;
 import com.chatProject.chat.common.Utils.Utils;
 import com.chatProject.chat.common.dto.CommonDto;
+import com.chatProject.chat.common.users.LoginUserManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -103,5 +107,21 @@ public class ChatService {
             return 1;
         }
 
+    }
+
+    public ChatRoomDto.chatRoomPageRes selectChatRoomPageDetail(Long chatRoomIdx) {
+        return chatMapper.selectChatRoomPageDetail(chatRoomIdx);
+    }
+
+    public List<ChatRoomDto.chatRoomUser> chatRoomPageSelectUserList(ChatRoomDto.chatRoomPwCheckReq req) {
+        // 채팅방에 있는 사용자인지 확인
+        Integer check = chatMapper.isUserInCheckRoom(req);
+        if (check == 1){
+            return chatMapper.selectChatRoomUserList(req).stream()
+                    .peek(v -> v.setUserLoginStatus(LoginUserManager.getAllLoggedUsers()))
+                    .collect(Collectors.toList());
+        }else {
+            return new ArrayList<>();
+        }
     }
 }
