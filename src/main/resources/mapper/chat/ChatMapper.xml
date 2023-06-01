@@ -218,5 +218,24 @@
           AND CHAT_ROOM_IDX = #{chatRoomIdx}
         ORDER BY A.USER_STATUS DESC, B.NICK_NAME ASC
     </select>
-
+    <select id="selectChatMassageList"
+            resultType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomMessages"
+            parameterType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomPwCheckReq">
+        /* 채팅방  */
+        SELECT
+            A.USER_IDX
+             ,B.USER_ID
+             ,B.NICK_NAME
+             ,(SELECT USER_STATUS FROM R_CHAT_ROOM_USER_MAPPING_T WHERE CHAT_ROOM_IDX = #{chatRoomIdx} AND USER_IDX = A.USER_IDX) USER_STATUS
+             ,DATE_FORMAT(A.CHAT_REGDATE, '%Y-%m-%d %H:%i:%s') AS CHAT_REGDATE
+             ,A.CONTENT AS MESSAGE
+        FROM
+            P_CHAT_CONTENT_T A
+                LEFT JOIN R_USER_T B
+                          ON A.USER_IDX = B.USER_IDX
+        WHERE 1=1
+          AND CHAT_ROOM_IDX = #{chatRoomIdx}
+        ORDER BY A.CHAT_REGDATE DESC
+        LIMIT 100
+    </select>
 </mapper>

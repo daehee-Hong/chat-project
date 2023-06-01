@@ -124,4 +124,14 @@ public class ChatService {
             return new ArrayList<>();
         }
     }
+
+    public List<ChatRoomDto.chatRoomMessages> chatRoomPageSelectChatMessageList(ChatRoomDto.chatRoomPwCheckReq req) {
+        // 채팅방에 있는 사용자인지 확인
+        Integer check = chatMapper.isUserInCheckRoom(req);
+        if (check == 1){
+            return chatMapper.selectChatMassageList(req);
+        }else {
+            return new ArrayList<>();
+        }
+    }
 }

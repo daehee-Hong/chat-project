@@ -140,4 +140,16 @@ public class ChatRoomDto {
             }
         }
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class chatRoomMessages {
+        private Long userIdx;
+        private String userId;
+        private String nickName;
+        private Integer userStatus;
+        private String chatRegdate;
+        private String message;
+    }
 }
