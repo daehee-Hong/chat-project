@@ -125,13 +125,23 @@ public class ChatService {
         }
     }
 
-    public List<ChatRoomDto.chatRoomMessages> chatRoomPageSelectChatMessageList(ChatRoomDto.chatRoomPwCheckReq req) {
+    public List<ChatRoomDto.chatRoomMessage> chatRoomPageSelectChatMessageList(ChatRoomDto.chatRoomPwCheckReq req) {
         // 채팅방에 있는 사용자인지 확인
         Integer check = chatMapper.isUserInCheckRoom(req);
         if (check == 1){
             return chatMapper.selectChatMassageList(req);
         }else {
             return new ArrayList<>();
+        }
+    }
+
+    public Object chatRoomPageSendChatMessage(ChatRoomDto.chatRoomPwCheckReq req) {
+        // 채팅방에 있는 사용자인지 확인
+        Integer check = chatMapper.isUserInCheckRoom(req);
+        if (check == 1){
+            return 1;
+        }else {
+            return 2;
         }
     }
 }

@@ -144,7 +144,7 @@ public class ChatRoomDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class chatRoomMessages {
+    public static class chatRoomMessage {
         private Long userIdx;
         private String userId;
         private String nickName;

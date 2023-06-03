@@ -143,7 +143,7 @@ public class ChatRestController {
      * @author daehee
      * @param Long chatRoomIdx (채팅방 IDX)
      * @param Long userIdx (사용자 IDX)
-     * @return List<ChatRoomDto.chatRoomMessages>
+     * @return List<ChatRoomDto.chatRoomMessage>
      * @see 채팅방 사용자 리스트 조회
      * */
     @GetMapping("/chat-room/{id}/chat-message")
@@ -155,6 +155,29 @@ public class ChatRestController {
             UserDto.userInfo userInfo = (UserDto.userInfo) session.getAttribute("userInfo");
 
             return new ResponseEntity<>(chatService.chatRoomPageSelectChatMessageList(new ChatRoomDto.chatRoomPwCheckReq(userInfo.getUserIdx(), chatRoomIdx, "")), HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("selectChatRoom Error : " + e.getMessage());
+            return new ResponseEntity<>(new CommonDto.commentRes("서버에러", "잠시후 다시 시도해주세요."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * @author daehee
+     * @param Long chatRoomIdx (채팅방 IDX)
+     * @param Long userIdx (사용자 IDX)
+     * @return ChatRoomDto.chatRoomMessage
+     * @see 채팅방 채팅 입력
+     * */
+    @GetMapping("/chat-room/{id}/send-message")
+    private ResponseEntity chatRoomPageSendChatMessage(
+            @PathVariable("id") Long chatRoomIdx,
+            HttpSession session
+    ) {
+        try{
+            UserDto.userInfo userInfo = (UserDto.userInfo) session.getAttribute("userInfo");
+
+            return new ResponseEntity<>(chatService.chatRoomPageSendChatMessage(new ChatRoomDto.chatRoomPwCheckReq(userInfo.getUserIdx(), chatRoomIdx, "")), HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
             log.error("selectChatRoom Error : " + e.getMessage());

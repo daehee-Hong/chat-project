@@ -1,12 +1,32 @@
 const chatRoomIdx = document.getElementById('chatRoomIdx').value;
+let client;
 $(function(){
     chatPageEvent();
     apiCell();
+    socketjs();
 })
+
+function socketjs(){
+    let socket = new SockJS("/ws");
+    client = Stomp.over(socket);
+    client.connect({}, function (frame) {
+        console.log("소켓 연결 : ", frame);
+    })
+
+    client.subscribe("/topic/message/" + chatRoomIdx,function (res){
+        console.log(JSON.parse(res.body));
+        console.log("다시확인 : ", res);
+    })
+}
 
 function chatPageEvent() {
     $(".chat").niceScroll();
-    $('.chat-scroll-bottom').scrollTop($('.chat-scroll-bottom')[0].scrollHeight);
+
+    document.getElementById('sendMessageBtn')
+        .addEventListener('keyup', function (){
+            if (window.event.keyCode == 13)
+                    sendMessage(this.value);
+        });
 }
 
 function apiCell() {
@@ -24,8 +44,16 @@ function apiCell() {
             const chatList = JSON.parse(data);
             makeChatRoomChatList(chatList)
         })
-
 }
+function sendMessage(message) {
+    // fetch('/api/v1/chat/chat-room/' + chatRoomIdx + "/send-message")
+    //     .then(res => res.text())
+    //     .then(data => {
+    //         console.log('data : ', data);
+    //     })
+    client.send("/chat/" + chatRoomIdx, {}, JSON.stringify({message : message, userIdx : 12}));
+}
+
 function makeChatRoomUserList(userList) {
     let userHtml = document.getElementById('chat-users');
     userList.map(v => {
@@ -48,21 +76,16 @@ function makeChatRoomChatList(chatList){
                                         <div class="avatar">
                                             <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="User name">
                                         </div>
-                                        <div class="name">${v.nickName}</div>
-                                        <div class="text">
+                                        <div class="name ${v.userStatus === 1 ? 'text-danger' : ''}">${v.nickName}</div>
+                                        <div class="text ">
                                             ${v.message}
                                         </div>
                                         <div class="time">${v.chatRegdate}</div>
                                     </div>`
         chatHtml.innerHTML += html;
     })
-    html = `
-                                    <div class="answer-add">
-                                        <input placeholder="입력 후 엔터를 눌러주세요.">
-                                        <span class="answer-btn answer-btn-1"></span>
-                                        <span class="answer-btn answer-btn-2"></span>
-                                    </div>
-    `
-    chatHtml.innerHTML += html;
+
+    $('.chat-scroll-bottom').scrollTop($('.chat-scroll-bottom')[0].scrollHeight);
 }
+
 

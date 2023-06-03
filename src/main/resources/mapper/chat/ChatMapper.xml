@@ -219,7 +219,7 @@
         ORDER BY A.USER_STATUS DESC, B.NICK_NAME ASC
     </select>
     <select id="selectChatMassageList"
-            resultType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomMessages"
+            resultType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomMessage"
             parameterType="com.chatProject.chat.chat.dto.ChatRoomDto$chatRoomPwCheckReq">
         /* 채팅방  */
         SELECT

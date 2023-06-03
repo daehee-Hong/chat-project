@@ -26,5 +26,5 @@ public interface ChatMapper {
 
     List<ChatRoomDto.chatRoomUser> selectChatRoomUserList(ChatRoomDto.chatRoomPwCheckReq req);
 
-    List<ChatRoomDto.chatRoomMessages> selectChatMassageList(ChatRoomDto.chatRoomPwCheckReq req);
+    List<ChatRoomDto.chatRoomMessage> selectChatMassageList(ChatRoomDto.chatRoomPwCheckReq req);
 }
